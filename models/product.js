@@ -30,7 +30,7 @@ Product.getAll = (idUser, result) => {
             P.id
     `;
 
-  db.query(sql, idUser,(err, data) => {
+  db.query(sql, idUser, (err, data) => {
     if (err) {
       console.log("Error: ", err);
       result(err, null);
@@ -123,7 +123,7 @@ Product.getAllByCategory = (idUser, idCategory, result) => {
 
 Product.searchWithCategory = (idUser, idCategory, name, result) => {
   const sql = `
-          SELECT
+        SELECT
             P.id,
             P.name,
             P.image,
@@ -150,7 +150,6 @@ Product.searchWithCategory = (idUser, idCategory, name, result) => {
       `;
 
   //Lower case in both fe and be to simply search
-
   db.query(
     sql,
     [idUser, idCategory, `%${name.toLowerCase()}%`],
@@ -166,6 +165,79 @@ Product.searchWithCategory = (idUser, idCategory, name, result) => {
       }
     }
   );
+};
+
+Product.getAllByFavorite = (idUser, result) => {
+  const sql = `
+    SELECT
+      P.id,
+      P.name,
+      P.image,
+      P.description,
+      P.price,
+      P.instruction,
+      json_arrayagg(
+        json_object(
+          'id', A.id,
+          'name', A.name
+        )
+      ) AS avoidance,
+      F.id As favorite
+    FROM
+      products AS P
+    INNER JOIN
+      favorites AS F ON F.idProduct = P.id
+    INNER JOIN
+      product_avoidance AS PA ON P.id = PA.idProduct
+    INNER JOIN
+      avoidances AS A ON A.id = PA.idAvoidance
+    WHERE
+      P.deleteFlag = 0 AND F.idUser = ?
+    GROUP BY 
+      P.id
+  `;
+
+  db.query(sql, idUser, (err, data) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(err, null);
+    } else {
+      console.log(`Found ${data.length} product`);
+      result(null, data);
+    }
+  });
+};
+
+Product.createFavorite = (idUser, idProduct, result) => {
+  const sql = `
+    INSERT INTO favorites(idUser, idProduct)
+    VALUES(?,?)
+  `;
+  db.query(sql, [idUser, idProduct], (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(err, null);
+    } else {
+      console.log(`Create Product with id ${idProduct}.`);
+      result(null, true);
+    }
+  });
+};
+
+Product.updateFavorite = (idUser, idProduct, result) => {
+  const sql = `
+    DELETE FROM favorites 
+    WHERE idUser = ? AND idProduct = ?
+  `;
+  db.query(sql, [idUser, idProduct], (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(err, null);
+    } else {
+      console.log(`Delete Product with id ${idProduct}.`);
+      result(null, true);
+    }
+  });
 };
 
 module.exports = Product;

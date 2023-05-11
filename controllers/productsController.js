@@ -61,4 +61,54 @@ module.exports = {
       return res.status(200).json(data);
     });
   },
+
+  getAllByFavorite(req, res) {
+    const idUser = req.params.idUser;
+    Product.getAllByFavorite(idUser, (err, data) => {
+      if (err) {
+        return res.status(501).json({
+          success: false,
+          message: "Fail to get all Product data!!",
+          error: err,
+        });
+      }
+      return res.status(200).json(data);
+    });
+  },
+
+  createFavorite(req, res) {
+    const idUser = req.body.idUser;
+    const idProduct = req.body.idProduct;
+    Product.createFavorite(idUser, idProduct, (err, data) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          message: "Update an product fail!!",
+          error: err,
+        });
+      }
+      return res.status(201).json({
+        success: true,
+        data: true,
+      });
+    });
+  },
+  
+  updateFavorite(req, res) {
+    const idUser = req.body.idUser;
+    const idProduct = req.body.idProduct;
+    Product.updateFavorite(idUser, idProduct, (err, data) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          message: "Update an product fail!!",
+          error: err,
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        data: true,
+      });
+    });
+  },
 };
