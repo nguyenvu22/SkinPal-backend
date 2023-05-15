@@ -16,7 +16,7 @@ const chatGPT = async (req, res) => {
         const reply = response.data.choices[0].text;
         console.log("reply: ", reply);
         return res.status(200).json({
-            status: true,
+            status: "success",
             message: reply
         })
     } catch (err) {
