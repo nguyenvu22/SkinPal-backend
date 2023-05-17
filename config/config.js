@@ -1,4 +1,4 @@
-const mysql = require("mysql");
+const mysql = require("mysql2");
 
 //Connect db
 const db = mysql.createConnection({
@@ -7,6 +7,12 @@ const db = mysql.createConnection({
   password: process.env.DB_PASSWORD,
   database: "skinpal_app",
 });
+// const db = mysql.createConnection({
+//   host: "localhost",
+//   user: "root",
+//   password: "123456",
+//   database: "shkinpal_app",
+// });
 
 db.connect(function (err) {
   if (err) throw err;

@@ -7,16 +7,18 @@ const cors = require("cors");
 const multer = require("multer");
 require('dotenv').config();
 
+const bodyParser = require('body-parser');
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const routineRoutes = require("./routes/routineRoutes");
+const chatRoutes = require("./routes/chatRoutes");
 
 const port = process.env.PORT || 3000;
-
+app.use(express.json({ limit: "9000mb" }));
+app.use(express.urlencoded({ limit: "9000mb", extended: true }));
 app.use(logger("dev"));
-app.use(express.json());
 app.use(
   express.urlencoded({
     extended: true,
@@ -37,11 +39,14 @@ categoryRoutes(app);
 productRoutes(app);
 orderRoutes(app);
 routineRoutes(app);
+chatRoutes(app);
 
 server.listen(3000, process.env.IP || "localhost", function () {
   console.log("Starting server at port : " + port);
 });
-
+// server.listen(3000, "192.168.1.7" || "localhost", function () {
+//   console.log("Starting server at port : " + port);
+// });
 app.get("/", (req, res) => {
   res.send("index");
 });
