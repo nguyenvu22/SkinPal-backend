@@ -95,7 +95,7 @@ module.exports = {
   },
   
   updateFavorite(req, res) {
-    const idUser = req.body.idUser;
+    const idUser = req.body.idUser;r
     const idProduct = req.body.idProduct;
     Product.updateFavorite(idUser, idProduct, (err, data) => {
       if (err) {

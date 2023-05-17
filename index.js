@@ -5,6 +5,7 @@ const server = http.createServer(app);
 const logger = require("morgan");
 const cors = require("cors");
 const multer = require("multer");
+require('dotenv').config();
 
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
@@ -37,7 +38,7 @@ productRoutes(app);
 orderRoutes(app);
 routineRoutes(app);
 
-server.listen(3000, "192.168.56.1" || "localhost", function () {
+server.listen(3000, process.env.IP || "localhost", function () {
   console.log("Starting server at port : " + port);
 });
 

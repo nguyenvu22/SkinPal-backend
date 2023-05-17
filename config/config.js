@@ -3,8 +3,8 @@ const mysql = require("mysql");
 //Connect db
 const db = mysql.createConnection({
   host: "localhost",
-  user: "freeuser",
-  password: "",
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
   database: "skinpal_app",
 });
 
