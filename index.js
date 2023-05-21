@@ -5,15 +5,17 @@ const server = http.createServer(app);
 const logger = require("morgan");
 const cors = require("cors");
 const multer = require("multer");
-require('dotenv').config();
+require("dotenv").config();
 
-const bodyParser = require('body-parser');
+const bodyParser = require("body-parser");
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
 const orderRoutes = require("./routes/orderRoutes");
 const routineRoutes = require("./routes/routineRoutes");
 const chatRoutes = require("./routes/chatRoutes");
+const blogRoutes = require("./routes/blogRoutes");
+const voucherRoutes = require("./routes/voucherRoutes");
 
 const port = process.env.PORT || 3000;
 app.use(express.json({ limit: "9000mb" }));
@@ -40,6 +42,8 @@ productRoutes(app);
 orderRoutes(app);
 routineRoutes(app);
 chatRoutes(app);
+blogRoutes(app);
+voucherRoutes(app);
 
 server.listen(3000, process.env.IP || "localhost", function () {
   console.log("Starting server at port : " + port);

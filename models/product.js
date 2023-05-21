@@ -11,6 +11,7 @@ Product.getAll = (idUser, result) => {
             P.description,
             P.price,
             P.instruction,
+            P.discount,
             json_arrayagg(
               json_object(
                 'id', A.id,
@@ -50,6 +51,7 @@ Product.searchAll = (idUser, name, result) => {
             P.description,
             P.price,
             P.instruction,
+            P.discount,
             json_arrayagg(
               json_object(
                 'id', A.id,
@@ -89,6 +91,7 @@ Product.getAllByCategory = (idUser, idCategory, result) => {
             P.description,
             P.price,
             P.instruction,
+            P.discount,
             json_arrayagg(
               json_object(
                 'id', A.id,
@@ -130,6 +133,7 @@ Product.searchWithCategory = (idUser, idCategory, name, result) => {
             P.description,
             P.price,
             P.instruction,
+            P.discount,
             json_arrayagg(
               json_object(
                 'id', A.id,
@@ -176,6 +180,7 @@ Product.getAllByFavorite = (idUser, result) => {
       P.description,
       P.price,
       P.instruction,
+      P.discount,
       json_arrayagg(
         json_object(
           'id', A.id,
