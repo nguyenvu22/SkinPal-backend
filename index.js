@@ -6,8 +6,6 @@ const logger = require("morgan");
 const cors = require("cors");
 const multer = require("multer");
 require("dotenv").config();
-
-const bodyParser = require("body-parser");
 const userRoutes = require("./routes/userRoutes");
 const categoryRoutes = require("./routes/categoryRoutes");
 const productRoutes = require("./routes/productRoutes");
@@ -16,6 +14,7 @@ const routineRoutes = require("./routes/routineRoutes");
 const chatRoutes = require("./routes/chatRoutes");
 const blogRoutes = require("./routes/blogRoutes");
 const voucherRoutes = require("./routes/voucherRoutes");
+const skintypeRoutes = require("./routes/skintypeRoutes");
 
 const port = process.env.PORT || 3000;
 app.use(express.json({ limit: "9000mb" }));
@@ -44,13 +43,10 @@ routineRoutes(app);
 chatRoutes(app);
 blogRoutes(app);
 voucherRoutes(app);
-
+skintypeRoutes(app)
 server.listen(3000, process.env.IP || "localhost", function () {
   console.log("Starting server at port : " + port);
 });
-// server.listen(3000, "192.168.1.7" || "localhost", function () {
-//   console.log("Starting server at port : " + port);
-// });
 app.get("/", (req, res) => {
   res.send("index");
 });
