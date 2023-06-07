@@ -117,11 +117,44 @@ module.exports = {
         });
       }
 
-      return res.status(201).json({
+      return res.status(200).json({
         success: true,
         message: "You have logged in.",
         data: user[0],
       });
+    });
+  },
+
+  loginGoogle(req, res) {
+    var user = req.body;
+    user.password = 123;
+    user.dob = "2000-01-01 00:0:00";
+
+    User.findByEmail(user.email, (err, resUser) => {
+      if (err) {
+        return res.status(501).json({
+          success: false,
+          message: "User not exist",
+          error: err,
+        });
+      }
+      if (resUser.length == 0) {
+        User.create(user, (errAtCreate, resultAtCreate) => {
+          User.findByEmail(user.email, (errAtLogin, userAtLogin) => {
+            return res.status(200).json({
+              success: true,
+              message: "You have logged in.",
+              data: userAtLogin[0],
+            });
+          });
+        });
+      } else {
+        return res.status(200).json({
+          success: true,
+          message: "You have logged in.",
+          data: resUser[0],
+        });
+      }
     });
   },
 
@@ -185,6 +218,23 @@ module.exports = {
           message: "Your profile has been updated",
           data: userByEmail[0],
         });
+      });
+    });
+  },
+
+  updateToPremium(req, res) {
+    const data = req.body;
+    User.updateToPremium(data, (err, data) => {
+      if (err)
+        return res.status(501).json({
+          success: false,
+          message: "",
+          error: err,
+        });
+      return res.status(200).json({
+        success: true,
+        message: "Your account is Premium now.",
+        data: data,
       });
     });
   },

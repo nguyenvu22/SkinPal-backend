@@ -11,10 +11,12 @@ User.create = (user, result) => {
               password,
               dob,
               avatar,
+              isPremium,
+              deleteFlg,
               createdAt,
               updatedAt
             )
-        VALUES(?,?,?,?,?,?,?)
+        VALUES(?,?,?,?,?,?,?,?,?)
     `;
 
   db.query(
@@ -25,6 +27,8 @@ User.create = (user, result) => {
       user.password,
       user.dob,
       user.avatar,
+      0,
+      0,
       new Date(),
       new Date(),
     ],
@@ -117,6 +121,32 @@ User.updateWithoutImg = (user, result) => {
   db.query(
     sql,
     [user.name, user.password, user.dob, new Date(), user.id],
+    (err, res) => {
+      if (err) {
+        console.log("Error: ", err);
+        result(err, null);
+      } else {
+        console.log("Update a user with id: " + res);
+        result(null, true);
+      }
+    }
+  );
+};
+
+User.updateToPremium = (data, result) => {
+  const sql = `
+    UPDATE
+      users
+    SET
+      isPremium = 1,
+      startPremium = ?,
+      endPremium = ?
+    WHERE
+      id = ?
+  `;
+  db.query(
+    sql,
+    [data.startPremium, data.endPremium, data.idUser],
     (err, res) => {
       if (err) {
         console.log("Error: ", err);

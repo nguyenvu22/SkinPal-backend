@@ -12,25 +12,27 @@ Voucher.findAll = (idUser, result) => {
         V.condition,
         V.image,
         V.isUsed,
+        V.discount,
         V.startDate,
         V.endDate
       FROM vouchers V
-      WHERE V.idUser = ?
+      WHERE V.idUser = ? AND V.isUsed = 0
       ORDER BY RAND()
       LIMIT 5
       `;
   } else {
     sql = `
     SELECT 
-    V.id,
-    V.name,
-    V.condition,
-    V.image,
-    V.isUsed,
-    V.startDate,
-    V.endDate
+      V.id,
+      V.name,
+      V.condition,
+      V.image,
+      V.isUsed,
+      V.discount,
+      V.startDate,
+      V.endDate
     FROM vouchers V
-    WHERE V.idUser = ?
+    WHERE V.idUser = ? AND V.isUsed = 0
     ORDER BY V.condition ASC
     `;
   }
@@ -41,6 +43,26 @@ Voucher.findAll = (idUser, result) => {
     } else {
       console.log(`Found ${data.length} voucher`);
       result(null, data);
+    }
+  });
+};
+
+Voucher.updateUsedVoucher = (idVoucher, result) => {
+  const sql = `
+  UPDATE
+    vouchers
+  SET
+    isUsed = 1
+  WHERE
+    id = ?
+  `;
+  db.query(sql, idVoucher, (err, data) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(err, null);
+    } else {
+      console.log("voucher is used");
+      result(null, true);
     }
   });
 };

@@ -1,6 +1,6 @@
 const { Configuration, OpenAIApi } = require("openai");
 const configuration = new Configuration({
-  apiKey: "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",
+  apiKey: "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",
 });
 const openai = new OpenAIApi(configuration);
 const chatGPT = async (req, res) => {
@@ -10,7 +10,7 @@ const chatGPT = async (req, res) => {
       model: "text-davinci-003",
       prompt: message,
       temperature: 0,
-      max_tokens: 150,
+      max_tokens: 300,
     });
     console.log("response.data: ", response.data);
     const reply = response.data.choices[0].text;
