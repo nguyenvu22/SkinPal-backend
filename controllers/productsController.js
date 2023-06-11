@@ -93,11 +93,28 @@ module.exports = {
       });
     });
   },
-  
-  updateFavorite(req, res) {
-    const idUser = req.body.idUser;r
-    const idProduct = req.body.idProduct;
-    Product.updateFavorite(idUser, idProduct, (err, data) => {
+
+  removeFavorite(req, res) {
+    const idUser = req.param.idUser;
+    Product.removeFavorite(idUser, (err, data) => {
+      if (err) {
+        return res.status(400).json({
+          success: false,
+          message: "Update an product fail!!",
+          error: err,
+        });
+      }
+      return res.status(200).json({
+        success: true,
+        data: true,
+      });
+    });
+  },
+
+  removeSpecificFavorite(req, res) {
+    const idUser = req.params.idUser;
+    const idProduct = req.params.idProduct;
+    Product.removeSpecificFavorite(idUser, idProduct, (err, data) => {
       if (err) {
         return res.status(400).json({
           success: false,

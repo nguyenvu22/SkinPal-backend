@@ -58,7 +58,8 @@ User.findByEmail = (email, result) => {
             studentIdentificationImg,
             isPremium,
             startPremium,
-            endPremium
+            endPremium,
+            idSkinType
         FROM
             users
         WHERE

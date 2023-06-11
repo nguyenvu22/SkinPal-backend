@@ -22,8 +22,12 @@ module.exports = (app) => {
     "/api/products/favoriteAdditional",
     productsController.createFavorite
   );
-  app.put(
-    "/api/products/productModification/",
-    productsController.updateFavorite
+  app.delete(
+    "/api/products/favoriteRemoval/:idUser",
+    productsController.removeFavorite
+  );
+  app.delete(
+    "/api/products/specificFavoriteRemoval/:idUser/:idProduct",
+    productsController.removeSpecificFavorite
   );
 };

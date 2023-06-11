@@ -17,8 +17,7 @@ Product.getAll = (idUser, result) => {
                 'id', A.id,
                 'name', A.name
               )
-            ) AS avoidance,
-            (SELECT F.id FROM favorites AS F WHERE F.idProduct = P.id AND F.idUser = ?) AS favorite
+            ) AS avoidance
         FROM
             products AS P
         INNER JOIN
@@ -57,8 +56,7 @@ Product.searchAll = (idUser, name, result) => {
                 'id', A.id,
                 'name', A.name
               )
-            ) AS avoidance,
-            (SELECT F.id FROM favorites AS F WHERE F.idProduct = P.id AND F.idUser = ?) AS favorite
+            ) AS avoidance
         FROM
             products AS P
         INNER JOIN
@@ -97,8 +95,7 @@ Product.getAllByCategory = (idUser, idCategory, result) => {
                 'id', A.id,
                 'name', A.name
                 )
-            ) AS avoidance,
-            (SELECT F.id FROM favorites AS F WHERE F.idProduct = P.id AND F.idUser = ?) AS favorite
+            ) AS avoidance
         FROM
             products AS P
         INNER JOIN
@@ -139,8 +136,7 @@ Product.searchWithCategory = (idUser, idCategory, name, result) => {
                 'id', A.id,
                 'name', A.name
               )
-            ) AS avoidance,
-            (SELECT F.id FROM favorites AS F WHERE F.idProduct = P.id AND F.idUser = ?) AS favorite
+            ) AS avoidance
         FROM
             products AS P
         INNER JOIN
@@ -186,8 +182,7 @@ Product.getAllByFavorite = (idUser, result) => {
           'id', A.id,
           'name', A.name
         )
-      ) AS avoidance,
-      F.id As favorite
+      ) AS avoidance
     FROM
       products AS P
     INNER JOIN
@@ -213,11 +208,31 @@ Product.getAllByFavorite = (idUser, result) => {
   });
 };
 
+Product.findFavoriteById = (idUser, idProduct, result) => {
+  const sql = `
+    SELECT
+      id
+    FROM
+      favorites
+    WHERE idUser = ? AND idProduct = ?
+  `;
+
+  db.query(sql, [idUser, idProduct], (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(err, null);
+    } else {
+      result(null, id);
+    }
+  });
+};
+
 Product.createFavorite = (idUser, idProduct, result) => {
   const sql = `
     INSERT INTO favorites(idUser, idProduct)
     VALUES(?,?)
   `;
+
   db.query(sql, [idUser, idProduct], (err, res) => {
     if (err) {
       console.log("Error: ", err);
@@ -229,17 +244,35 @@ Product.createFavorite = (idUser, idProduct, result) => {
   });
 };
 
-Product.updateFavorite = (idUser, idProduct, result) => {
+Product.removeFavorite = (idUser, result) => {
+  const sql = `
+    DELETE FROM favorites
+    WHERE idUser = ?
+  `;
+
+  db.query(sql, [idUser], (err, res) => {
+    if (err) {
+      console.log("Error: ", err);
+      result(err, null);
+    } else {
+      console.log(`Delete All Fav with User id ${idUser}.`);
+      result(null, true);
+    }
+  });
+};
+
+Product.removeSpecificFavorite = (idUser, idProduct, result) => {
   const sql = `
     DELETE FROM favorites 
     WHERE idUser = ? AND idProduct = ?
   `;
+
   db.query(sql, [idUser, idProduct], (err, res) => {
     if (err) {
       console.log("Error: ", err);
       result(err, null);
     } else {
-      console.log(`Delete Product with id ${idProduct}.`);
+      console.log(`Delete Fav with Product id ${idProduct}.`);
       result(null, true);
     }
   });
